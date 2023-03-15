@@ -22,7 +22,6 @@ function getLocalStorageData() {
     emailInput.value = object.email || '';
     textareaInput.value = object.message || '';
 
-    // console.log(object);
   }
 }
 
@@ -46,8 +45,10 @@ function handleSubmit(event) {
 }
 
 function handleInput(event) {
-  inputData[event.target.name] = event.target.value;
-
+  const formData = new FormData(form)
+  formData.forEach((value, key) => {
+        inputData[key] = value;
+    });
+  
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(inputData));
-  // console.log(inputData);
 }
