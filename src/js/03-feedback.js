@@ -13,22 +13,29 @@ form.addEventListener('input', _throttle(handleInput, 500));
 getLocalStorageData();
 
 function getLocalStorageData() {
-  const savedLocalStorageData = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const savedLocalStorageData = localStorage.getItem(LOCAL_STORAGE_KEY)
+    ? localStorage.getItem(LOCAL_STORAGE_KEY)
+    : 0;
 
-  if (savedLocalStorageData !== null) {
+  if (savedLocalStorageData) {
     const object = JSON.parse(savedLocalStorageData);
-    emailInput.value = object.email;
-    textareaInput.value = object.message;
+    emailInput.value = object.email || '';
+    textareaInput.value = object.message || '';
 
-    console.log(object);
+    // console.log(object);
   }
 }
 
 function handleSubmit(event) {
   event.preventDefault();
+  const alertMessage = 'All fields must be filled!';
   const {
     elements: { email, message },
   } = event.currentTarget;
+
+  if (email.value === '' || message.value === '') {
+    return alert(alertMessage);
+  }
 
   let result = {};
   result[email.name] = email.value;
@@ -39,14 +46,8 @@ function handleSubmit(event) {
 }
 
 function handleInput(event) {
-  const {
-    elements: { email, message },
-  } = event.currentTarget;
-
-  inputData.email = email.value;
-  inputData.message = message.value;
+  inputData[event.target.name] = event.target.value;
 
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(inputData));
-
-  console.log(inputData);
+  // console.log(inputData);
 }
